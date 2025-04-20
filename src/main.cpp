@@ -119,7 +119,7 @@ void setup()
 #if defined(INITIATING_NODE)
   // send the first packet on this node
   Serial.print(F("[SX1276] Sending first packet ... "));
-  transmissionState = radio.startTransmit("Hello World!");
+  transmissionState = radio.startTransmit(__TIME__ + String(" ") + String("Hello from ") + PROJECT_NAME);
   transmitFlag = true;
 #else
   // start listening for LoRa packets on this node
@@ -200,7 +200,7 @@ void loop()
 
       // send another one
       Serial.print(F("[SX1276] Sending another packet ... "));
-      transmissionState = radio.startTransmit("Hello World!");
+      transmissionState = radio.startTransmit(__TIME__ + String(" ") + String("Hello from ") + PROJECT_NAME);
       transmitFlag = true;
     }
   }
