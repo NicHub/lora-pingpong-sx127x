@@ -93,10 +93,16 @@ void setupLoRa()
     Serial.print(F("failed, code "));
     Serial.println(state);
     while (true)
-    {
-      delay(10);
-    }
+      yield();
   }
+}
+
+int transmitMsg()
+{
+  static uint16_t cnt = 0;
+  String msg =  ", cnt: " + String(++cnt) + ", millis: " +  String(millis()) + ", HelloFrom: " + PROJECT_NAME + ", CompilationTime: " + __TIME__;
+  int state = radio.startTransmit(msg);
+  return (state);
 }
 
 void setup()
@@ -119,7 +125,7 @@ void setup()
 #if defined(INITIATING_NODE)
   // send the first packet on this node
   Serial.print(F("[SX1276] Sending first packet ... "));
-  transmissionState = radio.startTransmit(__TIME__ + String(" ") + String("Hello from ") + PROJECT_NAME);
+  transmissionState = transmitMsg();
   transmitFlag = true;
 #else
   // start listening for LoRa packets on this node
@@ -200,7 +206,7 @@ void loop()
 
       // send another one
       Serial.print(F("[SX1276] Sending another packet ... "));
-      transmissionState = radio.startTransmit(__TIME__ + String(" ") + String("Hello from ") + PROJECT_NAME);
+      transmissionState = transmitMsg();
       transmitFlag = true;
     }
   }
